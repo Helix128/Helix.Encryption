@@ -1,5 +1,5 @@
 # Helix.Encryption
-Simple and basic random seed based string encryption system for Unity
+Simple and basic random seed based string encryption (and decryption) system for Unity
 
 
 # How to use
