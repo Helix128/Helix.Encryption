@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Text.RegularExpressions;
+using System.Security.Cryptography;
+using System.IO;
+using System.Text;
 namespace Helix.Encryption
 {
     public class Encryptor : MonoBehaviour
@@ -85,5 +88,37 @@ namespace Helix.Encryption
 
             return output;
         }
+        public static byte[] EncryptAes(string data, byte[] key, out byte[] iv)
+        {
+            using (var aes = Aes.Create())
+            {
+                aes.Mode = CipherMode.CBC; // Should ajust depending on what you want to encrypt
+                aes.Key = key;
+                aes.GenerateIV(); // Ensure we use a new IV for each encryption
+
+                using (var cryptoTransform = aes.CreateEncryptor())
+                {
+                    iv = aes.IV;
+                    return cryptoTransform.TransformFinalBlock(Encoding.ASCII.GetBytes(data), 0, data.Length);
+                }
+            }
+        }
+
+        public static string DecryptAes(byte[] data, byte[] key, byte[] iv)
+        {
+            using (var aes = Aes.Create())
+            {
+                aes.Key = key;
+                aes.IV = iv;
+                aes.Mode = CipherMode.CBC; // same as for encryption
+
+                using (var cryptoTransform = aes.CreateDecryptor())
+                {
+                    return Encoding.Default.GetString(cryptoTransform.TransformFinalBlock(data, 0, data.Length));
+                }
+            }
+        }
+
+
     }
 }
