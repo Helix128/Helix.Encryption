@@ -27,7 +27,7 @@ This mode allows the encryption seed to be generated once and saved to be used l
 # How it works
 
 It uses a global seed for each character in the input which changes randomly when there is an encryption.
-Then it encrypts numbers to numeric UTF32 ints and adds a random letter from the alphabet using the seed.
+Then it encrypts chars to numeric UTF32 ints and adds a random letter from the alphabet using the seed.
 The UTF32 int result then adds the seed.
 All the ints and letters are combined and returns the output string.
 For decryption it reads the seed,subtracts the seed for each character and parses every number character.
