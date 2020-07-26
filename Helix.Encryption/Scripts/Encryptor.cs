@@ -9,17 +9,43 @@ namespace Helix.Encryption
 
         static string abecedario = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         static int[] seed;
-     
+        static bool constantSeed;
+      
    
         public static string Encrypt(string input)
         {
-
+          
+            if (PlayerPrefs.GetInt("cSeed") == 1)
+            {
+                constantSeed = true;
+            }
+            else
+            {
+                constantSeed = false;
+            }
             char[] chars = input.ToCharArray();
             int[] ids = new int[chars.Length];
             seed = new int[ids.Length];
+            int cseed = 0;
+            if (constantSeed&&PlayerPrefs.GetInt("seed",-1)==-1)
+            {
+                cseed = Random.Range(0, abecedario.Length);
+                PlayerPrefs.SetInt("seed", cseed);
+            }
+            else if (constantSeed)
+            {
+                cseed = PlayerPrefs.GetInt("seed");
+            }
             for (int i = 0; i < chars.Length; i++)
             {
-                seed[i] = Random.Range(0, abecedario.Length);
+                if (constantSeed)
+                {
+                    seed[i] = cseed;
+                }
+                else
+                {
+                    seed[i] = Random.Range(0, abecedario.Length);
+                }
                 ids[i] = char.ConvertToUtf32(chars[i].ToString(), 0)+seed[i];
             }
             
@@ -45,6 +71,7 @@ namespace Helix.Encryption
                 int value;
                 if (int.TryParse(rawOutput[i], out value))
                 {
+                    
                     ids.Add(value-seed[i]);
 
                 }
