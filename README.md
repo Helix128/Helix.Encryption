@@ -15,7 +15,22 @@ Encryptor.Decrypt(string input)
 
 Returns a decrypted string of the input.
 
-# Constant Seed mode
+# AES Encryption (experimental)
+
+AES encryption methods are
+
+Encryptor.EncryptAes(string input,byte[] key, out byte[] iv)
+
+Returns byte array of the input encrypted with key and outputs an iv byte array used for later decryption together with the key.
+
+Encryptor.DecryptAes(byte[] data,byte[] key,byte[] iv)
+
+Returns string based off the data,using the key and the iv byte arrays for decryption.
+
+AES is not compatible with Constant Seed mode.
+
+
+# Constant Seed mode 
 
 This mode can be enabled in the Helix tab on top of the editor window,in the Encryption section and click Settings.
 
